@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "prisma generate",
+    "db:seed": "prisma db seed",
+    "db:push": "prisma db push --skip-generate",
+    "seed": "npm run db:generate && npm run db:seed"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.10.0",
@@ -42,5 +46,8 @@
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.8",
     "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }
