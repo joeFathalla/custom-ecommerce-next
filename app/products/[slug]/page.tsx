@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ProductConfigurator from "./product-configurator";
+import AddToCartButton from "./add-to-cart-button";
 
 export default async function ProductDetail({ params }: { params: { slug: string } }) {
   const product = await prisma.product.findFirst({ where: { slug: params.slug } });
@@ -63,17 +65,29 @@ export default async function ProductDetail({ params }: { params: { slug: string
               </div>
             )}
 
+            {/* Configurator */}
+            {product.customizable && (
+              <ProductConfigurator
+                basePriceCents={product.priceCents}
+                optionsJson={product.optionsJson as any}
+                productId={product.id}
+                productTitle={product.title}
+              />
+            )}
+
             {/* Product Actions */}
-            <div className="space-y-4">
-              <Button className="w-full h-12 text-base">
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                Add to Cart
-              </Button>
-              
-              <Button variant="outline" className="w-full h-12 text-base">
-                Add to Wishlist
-              </Button>
-            </div>
+            {!product.customizable && (
+              <div className="space-y-4">
+                <AddToCartButton
+                  productId={product.id}
+                  productTitle={product.title}
+                  basePriceCents={product.priceCents}
+                />
+                <Button variant="outline" className="w-full h-12 text-base">
+                  Add to Wishlist
+                </Button>
+              </div>
+            )}
 
             {/* Product Info */}
             <div className="border-t border-border pt-6 space-y-4">
