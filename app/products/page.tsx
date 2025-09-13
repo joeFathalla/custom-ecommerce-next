@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 
 export default async function ProductsIndexPage() {
@@ -20,8 +21,17 @@ export default async function ProductsIndexPage() {
               className="group bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-primary/20 transition-all duration-200"
             >
               <div className="aspect-square bg-muted relative overflow-hidden">
-                {/* Placeholder for product image */}
-                <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/20" />
+                {p.images && p.images.length > 0 ? (
+                  <Image
+                    src={p.images[0]}
+                    alt={p.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/20" />
+                )}
               </div>
               <div className="p-4">
                 <h3 className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2">

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -26,7 +27,17 @@ export default async function ProductDetail({ params }: { params: { slug: string
           {/* Product Image */}
           <div className="space-y-4">
             <div className="aspect-square bg-muted rounded-lg border border-border overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/20" />
+              {product.images && product.images.length > 0 ? (
+                <Image
+                  src={product.images[0]}
+                  alt={product.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/20" />
+              )}
               {product.featured && (
                 <div className="absolute top-4 left-4 bg-primary text-primary-foreground px-3 py-1 text-sm rounded">
                   Featured
@@ -34,15 +45,16 @@ export default async function ProductDetail({ params }: { params: { slug: string
               )}
             </div>
             
-            {/* Additional product images placeholder */}
-            <div className="grid grid-cols-4 gap-2">
-              {[...Array(4)].map((_, i) => (
-                <div 
-                  key={i} 
-                  className="aspect-square bg-muted rounded border border-border"
-                />
-              ))}
-            </div>
+            {/* Additional product images */}
+            {product.images && product.images.length > 1 && (
+              <div className="grid grid-cols-4 gap-2">
+                {product.images.slice(1, 5).map((img, i) => (
+                  <div key={i} className="aspect-square bg-muted rounded border border-border overflow-hidden relative">
+                    <Image src={img} alt={`${product.title} ${i + 2}`} fill className="object-cover" />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Product Details */}
