@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions, DefaultSession } from "next-auth";
+import { NextAuthOptions, DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
@@ -111,5 +111,8 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-export const { handlers, auth, signIn, signOut } = NextAuth(authOptions);
+// For NextAuth v4 in the App Router, define route handlers in
+// `app/api/auth/[...nextauth]/route.ts` using:
+//   import NextAuth from "next-auth";
+//   export const { GET, POST } = NextAuth(authOptions);
 
