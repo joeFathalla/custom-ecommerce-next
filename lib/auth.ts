@@ -3,10 +3,8 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: {
+    user: DefaultSession["user"] & {
       id: string;
-      email: string;
-      name: string;
       role?: "admin" | "user";
     };
   }
@@ -58,16 +56,20 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.role = (user as any).role ?? "user";
+        // Preserve user image for session consumption when available
+        if ((user as any).image) {
+          (token as any).picture = (user as any).image;
+        }
       }
       return token;
     },
     async session({ session, token }) {
       session.user = {
+        ...session.user,
         id: token.sub as string,
-        email: session.user?.email || "",
-        name: session.user?.name || "",
         role: (token as any).role ?? "user",
-      };
+        image: ((token as any).picture as string | undefined) ?? session.user?.image ?? null,
+      } as any;
       return session;
     },
   },

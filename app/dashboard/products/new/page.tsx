@@ -23,6 +23,7 @@ async function createProduct(formData: FormData) {
     } catch {
       optionsJson = null;
     }
+  }
   const files = formData.getAll("images").filter(Boolean) as File[];
 
   const allowedTypes = new Set([
@@ -60,7 +61,6 @@ async function createProduct(formData: FormData) {
       slug,
       priceCents,
       description,
-      images: [],
       customizable,
       optionsJson: optionsJson as any,
       images: savedImagePaths,
