@@ -14,6 +14,15 @@ async function createProduct(formData: FormData) {
   const slug = String(formData.get("slug") || "").trim();
   const priceCents = Math.round(Number(formData.get("price")) * 100);
   const description = String(formData.get("description") || "").trim() || null;
+  const customizable = String(formData.get("customizable") || "") === "on";
+  const optionsJsonRaw = String(formData.get("optionsJson") || "").trim();
+  let optionsJson: unknown | null = null;
+  if (customizable && optionsJsonRaw) {
+    try {
+      optionsJson = JSON.parse(optionsJsonRaw);
+    } catch {
+      optionsJson = null;
+    }
   const files = formData.getAll("images").filter(Boolean) as File[];
 
   const allowedTypes = new Set([
@@ -51,6 +60,9 @@ async function createProduct(formData: FormData) {
       slug,
       priceCents,
       description,
+      images: [],
+      customizable,
+      optionsJson: optionsJson as any,
       images: savedImagePaths,
     },
   });
@@ -105,7 +117,21 @@ export default function NewProductPage() {
           <Textarea id="description" name="description" rows={4} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="images">Images</Label>
+          <div className="flex items-center gap-2">
+            <input id="customizable" name="customizable" type="checkbox" />
+            <Label htmlFor="customizable">Customizable product</Label>
+          </div>
+          <div className="text-xs text-muted-foreground">
+            When enabled, provide an options JSON describing selectable attributes and price adjustments.
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="optionsJson">Options JSON</Label>
+          <Textarea id="optionsJson" name="optionsJson" rows={10} placeholder={`{\n  "options": [\n    {\n      "id": "size",\n      "label": "Size",\n      "type": "select",\n      "required": true,\n      "choices": [\n        { "value": "S", "label": "Small", "priceDeltaCents": 0 },\n        { "value": "M", "label": "Medium", "priceDeltaCents": 200 },\n        { "value": "L", "label": "Large", "priceDeltaCents": 400 }\n      ]\n    },\n    {\n      "id": "engraving",\n      "label": "Engraving (max 20 chars)",\n      "type": "text",\n      "maxLength": 20,\n      "priceDeltaCents": 500\n    }\n  ]\n}`} />
+          <div className="text-xs text-muted-foreground">
+            Supported types: "select" with {`{ value, label, priceDeltaCents }`} choices, and "text" with optional {`maxLength`} and {`priceDeltaCents`} applied when not empty.
+          </div>
+      <Label htmlFor="images">Images</Label>
           <Input id="images" name="images" type="file" multiple accept="image/*" />
           <p className="text-xs text-muted-foreground">JPEG, PNG, WEBP, GIF, SVG. Max 5MB each.</p>
         </div>

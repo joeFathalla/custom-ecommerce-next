@@ -31,6 +31,8 @@ model Product {
   priceCents  Int
   images      String[]
   featured    Boolean   @default(false)
+  customizable Boolean   @default(false)
+  optionsJson  Json?
 
   categoryId  String?   @db.ObjectId
   category    Category? @relation(fields: [categoryId], references: [id])
