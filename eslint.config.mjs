@@ -18,6 +18,9 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      // Ignore generated Prisma runtime files (contain CommonJS and patterns ESLint flags)
+      "lib/generated/**",
+      "prisma/generated/**",
     ],
   },
 ];

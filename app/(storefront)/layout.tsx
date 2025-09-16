@@ -1,9 +1,11 @@
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { SimpleThemeToggle } from "@/components/theme-toggle";
-import { auth } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export default async function StorefrontLayout({ children }: { children: React.ReactNode }) {
-  const session = await auth();
+  const session = await getServerSession(authOptions);
   
   return (
     <div className="min-h-screen flex flex-col bg-background">

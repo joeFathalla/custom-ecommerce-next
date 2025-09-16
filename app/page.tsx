@@ -1,1 +1,1 @@
-export { default } from "./(storefront)/page";
+export { default, dynamic, fetchCache } from "./(storefront)/page";
