@@ -1,41 +1,6 @@
 import { NextAuthOptions, DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-
-/*
-  🔑 GOOGLE OAUTH SETUP INSTRUCTIONS 🔑
-  
-  To enable Google Login, you need to:
-  
-  1. Go to Google Cloud Console: https://console.cloud.google.com/
-  
-  2. Create a new project or select an existing one
-  
-  3. Enable the Google+ API:
-     - Go to "APIs & Services" > "Library"
-     - Search for "Google+ API" and enable it
-  
-  4. Create OAuth 2.0 credentials:
-     - Go to "APIs & Services" > "Credentials"
-     - Click "Create Credentials" > "OAuth client ID"
-     - Choose "Web application"
-     - Add authorized redirect URIs:
-       * For development: http://localhost:3000/api/auth/callback/google
-       * For production: https://yourdomain.com/api/auth/callback/google
-  
-  5. Add these environment variables to your .env.local file:
-     
-     GOOGLE_CLIENT_ID="your_google_client_id_here"
-     GOOGLE_CLIENT_SECRET="your_google_client_secret_here"
-     
-     NEXTAUTH_URL="http://localhost:3000" (for development)
-     NEXTAUTH_SECRET="your_random_secret_key_here" (generate with: openssl rand -base64 32)
-  
-  6. Make sure your domain is added to authorized origins in Google Console
-  
-  💡 Pro tip: Keep your Google credentials secure and never commit them to version control!
-*/
-
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
